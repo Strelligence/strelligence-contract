@@ -1,22 +1,35 @@
-# Soroban Project
+# Strelligence Smart Contracts
 
-## Project Structure
+Soroban smart contracts powering the programmable financial metadata layer for Strelligence.
 
-This repository uses the recommended structure for a Soroban project:
+## Overview
 
-```text
-.
-├── contracts
-│   └── hello_world
-│       ├── src
-│       │   ├── lib.rs
-│       │   └── test.rs
-│       └── Cargo.toml
-├── Cargo.toml
-└── README.md
-```
+The Strelligence contracts provide:
+- recurring payment metadata
+- transaction tagging
+- financial automation primitives
+- programmable treasury utilities
 
-- New Soroban contracts can be put in `contracts`, each in their own directory. There is already a `hello_world` contract in there to get you started.
-- If you initialized this project with any other example contracts via `--with-example`, those contracts will be in the `contracts` directory as well.
-- Contracts should have their own `Cargo.toml` files that rely on the top-level `Cargo.toml` workspace for their dependencies.
-- Frontend libraries can be added to the top-level directory as well. If you initialized this project with a frontend template via `--frontend-template` you will have those files already included.
+## Purpose
+
+The contracts extend Stellar/Soroban transactions with:
+- structured metadata
+- recurrence standards
+- programmable financial coordination
+
+## Tech Stack
+
+- Rust
+- Soroban SDK
+- Soroban CLI
+
+## Contracts
+
+### Recurring Registry
+Tracks recurring payment relationships.
+
+### Metadata Registry
+Stores standardized financial metadata.
+
+### Automation Rules
+Supports programmable financial routing and treasury logic.
