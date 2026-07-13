@@ -72,10 +72,7 @@ mod test {
         );
 
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::InvalidAmount
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::InvalidAmount);
     }
 
     #[test]
@@ -99,10 +96,7 @@ mod test {
         );
 
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::InvalidAmount
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::InvalidAmount);
     }
 
     #[test]
@@ -233,15 +227,8 @@ mod test {
         env.mock_all_auths();
 
         let owner = Address::generate(&env);
-        let result = client.try_update_subscription(
-            &owner,
-            &999,
-            &None,
-            &None,
-            &None,
-            &None,
-            &None,
-        );
+        let result =
+            client.try_update_subscription(&owner, &999, &None, &None, &None, &None, &None);
 
         assert!(result.is_err());
         assert_eq!(
@@ -271,21 +258,11 @@ mod test {
             &None,
         );
 
-        let result = client.try_update_subscription(
-            &owner,
-            &id,
-            &None,
-            &None,
-            &Some(0),
-            &None,
-            &None,
-        );
+        let result =
+            client.try_update_subscription(&owner, &id, &None, &None, &Some(0), &None, &None);
 
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::InvalidAmount
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::InvalidAmount);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -410,10 +387,7 @@ mod test {
 
         let result = client.try_pause_subscription(&owner, &id);
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::AlreadyInState
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::AlreadyInState);
     }
 
     #[test]

@@ -102,8 +102,7 @@ mod bench {
         );
 
         let start = env.ledger().sequence();
-        let _results =
-            client.get_metadata_by_category(&owner, &TransactionCategory::Expense);
+        let _results = client.get_metadata_by_category(&owner, &TransactionCategory::Expense);
         let end = env.ledger().sequence();
 
         let elapsed = end - start;

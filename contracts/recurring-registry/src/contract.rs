@@ -89,9 +89,11 @@ impl RecurringRegistryContract {
         env.storage()
             .persistent()
             .set(&DataKey::WalletSubscriptions(owner.clone()), &ids);
-        env.storage()
-            .persistent()
-            .extend_ttl(&DataKey::WalletSubscriptions(owner.clone()), 0, STORAGE_TTL);
+        env.storage().persistent().extend_ttl(
+            &DataKey::WalletSubscriptions(owner.clone()),
+            0,
+            STORAGE_TTL,
+        );
 
         events::subscription_created(&env, &owner, id);
 
@@ -154,11 +156,7 @@ impl RecurringRegistryContract {
 
     /// Cancel a subscription permanently.
     /// Only the subscription owner can cancel.
-    pub fn cancel_subscription(
-        env: Env,
-        caller: Address,
-        id: u64,
-    ) -> Result<(), ContractError> {
+    pub fn cancel_subscription(env: Env, caller: Address, id: u64) -> Result<(), ContractError> {
         caller.require_auth();
 
         let mut sub: Subscription = env
@@ -186,11 +184,7 @@ impl RecurringRegistryContract {
     }
 
     /// Pause a subscription temporarily.
-    pub fn pause_subscription(
-        env: Env,
-        caller: Address,
-        id: u64,
-    ) -> Result<(), ContractError> {
+    pub fn pause_subscription(env: Env, caller: Address, id: u64) -> Result<(), ContractError> {
         caller.require_auth();
 
         let mut sub: Subscription = env
@@ -221,11 +215,7 @@ impl RecurringRegistryContract {
     }
 
     /// Resume a paused subscription.
-    pub fn resume_subscription(
-        env: Env,
-        caller: Address,
-        id: u64,
-    ) -> Result<(), ContractError> {
+    pub fn resume_subscription(env: Env, caller: Address, id: u64) -> Result<(), ContractError> {
         caller.require_auth();
 
         let mut sub: Subscription = env
@@ -269,8 +259,7 @@ impl RecurringRegistryContract {
             .get(&DataKey::Subscription(id))
             .ok_or(ContractError::SubscriptionNotFound)?;
 
-        if sub.status == SubscriptionStatus::Cancelled
-            || sub.status == SubscriptionStatus::Expired
+        if sub.status == SubscriptionStatus::Cancelled || sub.status == SubscriptionStatus::Expired
         {
             return Err(ContractError::InactiveSubscription);
         }
@@ -296,9 +285,7 @@ impl RecurringRegistryContract {
 
     /// Fetch a single subscription by its ID.
     pub fn get_subscription(env: Env, id: u64) -> Option<Subscription> {
-        env.storage()
-            .persistent()
-            .get(&DataKey::Subscription(id))
+        env.storage().persistent().get(&DataKey::Subscription(id))
     }
 
     /// List all subscription IDs registered for a wallet.

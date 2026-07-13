@@ -15,7 +15,11 @@ mod test {
         (env, client)
     }
 
-    fn create_sample_rule(client: &AutomationRulesContractClient, env: &Env, owner: &Address) -> u64 {
+    fn create_sample_rule(
+        client: &AutomationRulesContractClient,
+        env: &Env,
+        owner: &Address,
+    ) -> u64 {
         client.create_rule(
             owner,
             &RuleType::AutoSave,
