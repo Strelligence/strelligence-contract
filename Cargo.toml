@@ -6,3 +6,7 @@ members = [
     "contracts/metadata-registry",
     "contracts/automation-rules"
 ]
+
+[workspace.dependencies]
+soroban-sdk = "=25.3.1"
+ed25519-dalek = ">=2.0, <3.0"
