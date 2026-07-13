@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32v1-none
+
+      - name: Cache Cargo registry and build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run tests
+        run: cargo test --workspace
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+          targets: wasm32v1-none
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run clippy
+        run: cargo clippy --workspace --all-targets -- -W clippy::all -A clippy::deprecated
+
+  build:
+    name: Build WASM
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32v1-none
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Build recurring-registry
+        run: cargo build --target wasm32v1-none --release -p recurring-registry
+
+      - name: Build metadata-registry
+        run: cargo build --target wasm32v1-none --release -p metadata-registry
+
+      - name: Build automation-rules
+        run: cargo build --target wasm32v1-none --release -p automation-rules
+
+      - name: Build upgradeable
+        run: cargo build --target wasm32v1-none --release -p upgradeable
+
+      - name: Check WASM sizes
+        run: |
+          echo "WASM Binary Sizes:"
+          ls -lh target/wasm32v1-none/release/*.wasm
+          echo ""
+          MAX_SIZE_KB=100
+          for wasm in target/wasm32v1-none/release/*.wasm; do
+            SIZE_BYTES=$(stat -f%z "$wasm" 2>/dev/null || stat -c%s "$wasm")
+            SIZE_KB=$((SIZE_BYTES / 1024))
+            NAME=$(basename "$wasm" .wasm)
+            echo "$NAME: ${SIZE_KB}KB"
+            if [ "$SIZE_KB" -gt "$MAX_SIZE_KB" ]; then
+              echo "ERROR: $NAME exceeds ${MAX_SIZE_KB}KB limit (${SIZE_KB}KB)"
+              exit 1
+            fi
+          done
+          echo "All WASM binaries within size limits."
+
+      - name: Upload WASM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm-contracts
+          path: target/wasm32v1-none/release/*.wasm
+          retention-days: 30
