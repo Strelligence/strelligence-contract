@@ -5,6 +5,7 @@ members = [
     "contracts/recurring-registry",
     "contracts/metadata-registry",
     "contracts/automation-rules",
+    "contracts/upgradeable",
     "tests"
 ]
 
