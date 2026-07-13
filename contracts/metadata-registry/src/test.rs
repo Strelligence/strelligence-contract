@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod test {
+    use soroban_sdk::testutils::Address as _;
     use soroban_sdk::{Address, Env, String, Vec};
 
     use crate::contract::MetadataRegistryContract;
@@ -7,7 +8,7 @@ mod test {
     use crate::errors::ContractError;
     use crate::types::{TransactionCategory, TransactionSentiment};
 
-    fn setup() -> (Env, MetadataRegistryContractClient) {
+    fn setup<'a>() -> (Env, MetadataRegistryContractClient<'a>) {
         let env = Env::default();
         let contract_id = env.register_contract(None, MetadataRegistryContract);
         let client = MetadataRegistryContractClient::new(&env, &contract_id);
@@ -215,8 +216,8 @@ mod test {
 
         let hashes = client.get_wallet_metadata(&caller);
         assert_eq!(hashes.len(), 2);
-        assert_eq!(hashes.get(0), tx_hash1);
-        assert_eq!(hashes.get(1), tx_hash2);
+        assert_eq!(hashes.get_unchecked(0), tx_hash1);
+        assert_eq!(hashes.get_unchecked(1), tx_hash2);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -326,7 +327,9 @@ mod test {
             &None,
         );
 
-        assert!(result.is_err());
+        assert!(result.is_ok());
+        let meta = client.get_metadata(&tx_hash).unwrap();
+        assert_eq!(meta.category, TransactionCategory::Income);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
