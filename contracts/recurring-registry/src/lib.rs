@@ -10,4 +10,5 @@ pub use contract::*;
 pub use errors::ContractError;
 pub use types::{Frequency, Subscription, SubscriptionStatus, SubscriptionType};
 
+mod bench;
 mod test;

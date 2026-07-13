@@ -10,4 +10,5 @@ pub use contract::*;
 pub use errors::ContractError;
 pub use types::{Metadata, Tag, TransactionCategory, TransactionSentiment};
 
+mod bench;
 mod test;

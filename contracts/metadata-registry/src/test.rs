@@ -260,10 +260,7 @@ mod test {
         let meta = client.get_metadata(&tx_hash).unwrap();
         assert_eq!(meta.category, TransactionCategory::Income);
         assert_eq!(meta.sentiment, TransactionSentiment::Positive);
-        assert_eq!(
-            meta.label,
-            Some(String::from_str(&env, "Salary Payment"))
-        );
+        assert_eq!(meta.label, Some(String::from_str(&env, "Salary Payment")));
         assert_eq!(meta.tags.len(), 2);
     }
 
@@ -512,8 +509,7 @@ mod test {
         let (env, client) = setup();
 
         let owner = Address::generate(&env);
-        let results =
-            client.get_metadata_by_category(&owner, &TransactionCategory::Expense);
+        let results = client.get_metadata_by_category(&owner, &TransactionCategory::Expense);
         assert_eq!(results.len(), 0);
     }
 }

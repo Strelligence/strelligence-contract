@@ -83,9 +83,11 @@ impl MetadataRegistryContract {
         env.storage()
             .persistent()
             .set(&DataKey::WalletTxHashes(owner.clone()), &tx_hashes);
-        env.storage()
-            .persistent()
-            .extend_ttl(&DataKey::WalletTxHashes(owner.clone()), 0, STORAGE_TTL);
+        env.storage().persistent().extend_ttl(
+            &DataKey::WalletTxHashes(owner.clone()),
+            0,
+            STORAGE_TTL,
+        );
 
         events::metadata_added(&env, &owner, &tx_hash);
 
@@ -154,9 +156,7 @@ impl MetadataRegistryContract {
 
     /// Fetch metadata for a single transaction hash.
     pub fn get_metadata(env: Env, tx_hash: String) -> Option<Metadata> {
-        env.storage()
-            .persistent()
-            .get(&DataKey::Metadata(tx_hash))
+        env.storage().persistent().get(&DataKey::Metadata(tx_hash))
     }
 
     /// List all transaction hashes that have metadata for a wallet.

@@ -93,10 +93,7 @@ mod test {
         let current_hash = client.get_wasm_hash().unwrap();
         let result = client.try_upgrade(&admin, &current_hash);
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::SameWasmHash
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::SameWasmHash);
     }
 
     #[test]
@@ -111,10 +108,7 @@ mod test {
         let new_hash = Bytes::from_array(&env, &[2u8; 32]);
         let result = client.try_upgrade(&attacker, &new_hash);
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::Unauthorized
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::Unauthorized);
     }
 
     #[test]

@@ -131,7 +131,10 @@ mod tests {
         );
 
         let meta = metadata.get_metadata(&tx_hash).unwrap();
-        assert_eq!(meta.notes, Some(String::from_str(&env, "January salary from Acme")));
+        assert_eq!(
+            meta.notes,
+            Some(String::from_str(&env, "January salary from Acme"))
+        );
     }
 
     #[test]

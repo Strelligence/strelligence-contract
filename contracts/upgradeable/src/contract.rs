@@ -13,11 +13,7 @@ pub struct UpgradeableContract;
 impl UpgradeableContract {
     /// Initialize the upgradeable contract with an admin.
     pub fn initialize(env: Env, admin: Address) {
-        if env
-            .storage()
-            .instance()
-            .has(&DataKey::Admin)
-        {
+        if env.storage().instance().has(&DataKey::Admin) {
             panic!("already initialized");
         }
 
@@ -30,9 +26,7 @@ impl UpgradeableContract {
             .instance()
             .set(&DataKey::WasmHash, &placeholder);
 
-        env.storage()
-            .instance()
-            .extend_ttl(0, 6312000);
+        env.storage().instance().extend_ttl(0, 6312000);
     }
 
     /// Upgrade the contract to a new WASM hash. Only the admin can call this.

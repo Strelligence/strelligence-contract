@@ -34,9 +34,7 @@ impl AutomationRulesContract {
             .get(&DataKey::NextRuleId)
             .unwrap_or(0u64)
             + 1;
-        env.storage()
-            .instance()
-            .set(&DataKey::NextRuleId, &id);
+        env.storage().instance().set(&DataKey::NextRuleId, &id);
 
         let rule = Rule {
             id,
@@ -52,9 +50,7 @@ impl AutomationRulesContract {
             execution_count: 0,
         };
 
-        env.storage()
-            .persistent()
-            .set(&DataKey::Rule(id), &rule);
+        env.storage().persistent().set(&DataKey::Rule(id), &rule);
         env.storage()
             .persistent()
             .extend_ttl(&DataKey::Rule(id), 0, STORAGE_TTL);
@@ -68,9 +64,11 @@ impl AutomationRulesContract {
         env.storage()
             .persistent()
             .set(&DataKey::WalletRules(caller.clone()), &rule_ids);
-        env.storage()
-            .persistent()
-            .extend_ttl(&DataKey::WalletRules(caller.clone()), 0, STORAGE_TTL);
+        env.storage().persistent().extend_ttl(
+            &DataKey::WalletRules(caller.clone()),
+            0,
+            STORAGE_TTL,
+        );
 
         events::rule_created(&env, &caller, id);
 
@@ -106,9 +104,7 @@ impl AutomationRulesContract {
             rule.action_params = ap;
         }
 
-        env.storage()
-            .persistent()
-            .set(&DataKey::Rule(id), &rule);
+        env.storage().persistent().set(&DataKey::Rule(id), &rule);
         env.storage()
             .persistent()
             .extend_ttl(&DataKey::Rule(id), 0, STORAGE_TTL);
@@ -136,9 +132,7 @@ impl AutomationRulesContract {
 
         rule.status = RuleStatus::Paused;
 
-        env.storage()
-            .persistent()
-            .set(&DataKey::Rule(id), &rule);
+        env.storage().persistent().set(&DataKey::Rule(id), &rule);
 
         events::rule_paused(&env, &rule.owner, id);
 
@@ -163,9 +157,7 @@ impl AutomationRulesContract {
 
         rule.status = RuleStatus::Active;
 
-        env.storage()
-            .persistent()
-            .set(&DataKey::Rule(id), &rule);
+        env.storage().persistent().set(&DataKey::Rule(id), &rule);
 
         events::rule_updated(&env, &rule.owner, id);
 
@@ -190,9 +182,7 @@ impl AutomationRulesContract {
 
         rule.status = RuleStatus::Deleted;
 
-        env.storage()
-            .persistent()
-            .set(&DataKey::Rule(id), &rule);
+        env.storage().persistent().set(&DataKey::Rule(id), &rule);
 
         events::rule_deleted(&env, &rule.owner, id);
 
@@ -212,9 +202,7 @@ impl AutomationRulesContract {
         rule.execution_count += 1;
         rule.last_executed_ledger = env.ledger().sequence() as u64;
 
-        env.storage()
-            .persistent()
-            .set(&DataKey::Rule(id), &rule);
+        env.storage().persistent().set(&DataKey::Rule(id), &rule);
         env.storage()
             .persistent()
             .extend_ttl(&DataKey::Rule(id), 0, STORAGE_TTL);
