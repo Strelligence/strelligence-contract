@@ -18,6 +18,12 @@ unused_imports = "warn"
 unused_variables = "warn"
 dead_code = "warn"
 
+[workspace.lints.clippy]
+unwrap_used = "allow"
+expect_used = "allow"
+panic = "warn"
+too_many_arguments = "allow"
+
 [profile.release]
 opt-level = "z"
 lto = true
