@@ -1,0 +1,19 @@
+[package]
+name = "integration-tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["lib"]
+doctest = false
+path = "integration/mod.rs"
+
+[dependencies]
+soroban-sdk = { workspace = true }
+recurring-registry = { path = "../contracts/recurring-registry" }
+metadata-registry = { path = "../contracts/metadata-registry" }
+automation-rules = { path = "../contracts/automation-rules" }
+
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }
