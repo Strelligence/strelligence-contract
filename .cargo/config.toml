@@ -1,0 +1,5 @@
+# Soroban contract build settings
+# Use: cargo build --target wasm32v1-none --release -p <contract>
+#
+# For running tests, use:
+#   cargo test --workspace (no target override needed)
