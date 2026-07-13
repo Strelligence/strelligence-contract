@@ -9,3 +9,5 @@ mod types;
 pub use contract::*;
 pub use errors::ContractError;
 pub use types::{Rule, RuleStatus, RuleTrigger, RuleType};
+
+mod test;

@@ -4,7 +4,8 @@ resolver = "2"
 members = [
     "contracts/recurring-registry",
     "contracts/metadata-registry",
-    "contracts/automation-rules"
+    "contracts/automation-rules",
+    "tests"
 ]
 
 [workspace.dependencies]
