@@ -32,10 +32,9 @@ impl AccessControlContract {
             expires_at_ledger: None,
         };
 
-        env.storage().instance().set(
-            &DataKey::RoleAssignment(admin.clone()),
-            &admin_assignment,
-        );
+        env.storage()
+            .instance()
+            .set(&DataKey::RoleAssignment(admin.clone()), &admin_assignment);
 
         env.storage()
             .instance()
@@ -94,10 +93,9 @@ impl AccessControlContract {
             expires_at_ledger,
         };
 
-        env.storage().instance().set(
-            &DataKey::RoleAssignment(grantee.clone()),
-            &assignment,
-        );
+        env.storage()
+            .instance()
+            .set(&DataKey::RoleAssignment(grantee.clone()), &assignment);
 
         env.storage().instance().extend_ttl(0, 6_312_000);
 

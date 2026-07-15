@@ -24,9 +24,7 @@ impl VersioningContract {
 
         let placeholder = Bytes::from_array(&env, &[0u8; 32]);
         env.storage().instance().set(&DataKey::Admin, &admin);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextRecordId, &0u64);
+        env.storage().instance().set(&DataKey::NextRecordId, &0u64);
         env.storage()
             .instance()
             .set(&DataKey::Version, &INITIAL_VERSION);
@@ -90,9 +88,7 @@ impl VersioningContract {
         env.storage()
             .instance()
             .set(&DataKey::VersionRecord(id), &record);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextRecordId, &id);
+        env.storage().instance().set(&DataKey::NextRecordId, &id);
         env.storage()
             .instance()
             .set(&DataKey::ContractVersion(contract_address), &id);

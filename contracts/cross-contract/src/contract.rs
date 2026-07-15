@@ -39,9 +39,7 @@ impl CrossContractRouter {
         env.storage()
             .instance()
             .set(&DataKey::ContractRegistry, &registry);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextCallId, &0u64);
+        env.storage().instance().set(&DataKey::NextCallId, &0u64);
         env.storage()
             .instance()
             .set(&DataKey::Version, &INITIAL_VERSION);
@@ -108,9 +106,7 @@ impl CrossContractRouter {
         env.storage()
             .instance()
             .set(&DataKey::CrossCall(call_id), &call);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextCallId, &call_id);
+        env.storage().instance().set(&DataKey::NextCallId, &call_id);
 
         events::cross_call_initiated(&env, &caller, call_id);
 
@@ -175,9 +171,7 @@ impl CrossContractRouter {
         env.storage()
             .instance()
             .set(&DataKey::CrossCall(call_id), &call);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextCallId, &call_id);
+        env.storage().instance().set(&DataKey::NextCallId, &call_id);
 
         events::cross_call_initiated(&env, &caller, call_id);
 
@@ -242,9 +236,7 @@ impl CrossContractRouter {
         env.storage()
             .instance()
             .set(&DataKey::CrossCall(call_id), &call);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextCallId, &call_id);
+        env.storage().instance().set(&DataKey::NextCallId, &call_id);
 
         events::cross_call_initiated(&env, &caller, call_id);
 

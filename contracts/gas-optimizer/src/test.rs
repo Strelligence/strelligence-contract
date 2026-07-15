@@ -60,14 +60,7 @@ mod test {
     fn test_record_gas_profile_success() {
         let (env, client, admin) = setup_initialized();
 
-        let id = client.record_gas_profile(
-            &admin,
-            &1,
-            &10,
-            &5,
-            &1024,
-            &512,
-        );
+        let id = client.record_gas_profile(&admin, &1, &10, &5, &1024, &512);
 
         assert_eq!(id, 1);
         assert_eq!(client.total_profiles(), 1);
@@ -83,14 +76,7 @@ mod test {
         let (env, client, _) = setup_initialized();
         let non_admin = Address::generate(&env);
 
-        let result = client.try_record_gas_profile(
-            &non_admin,
-            &1,
-            &10,
-            &5,
-            &1024,
-            &512,
-        );
+        let result = client.try_record_gas_profile(&non_admin, &1, &10, &5, &1024, &512);
         assert!(result.is_err());
         assert_eq!(result.unwrap_err().unwrap(), ContractError::Unauthorized);
     }

@@ -118,10 +118,7 @@ mod test {
 
         let result = client.try_deprecate_version(&admin, &999);
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::VersionNotFound
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::VersionNotFound);
     }
 
     // ─────────────────────────────────────────────────────────────────────────

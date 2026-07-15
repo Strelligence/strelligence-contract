@@ -100,10 +100,7 @@ mod test {
             &Bytes::from_array(&env, &[0u8; 32]),
         );
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::InvalidLabel
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::InvalidLabel);
     }
 
     #[test]

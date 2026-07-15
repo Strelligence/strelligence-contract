@@ -24,9 +24,7 @@ impl EventFilterContract {
 
         let placeholder = Bytes::from_array(&env, &[0u8; 32]);
         env.storage().instance().set(&DataKey::Admin, &admin);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextEventId, &0u64);
+        env.storage().instance().set(&DataKey::NextEventId, &0u64);
         env.storage()
             .instance()
             .set(&DataKey::Version, &INITIAL_VERSION);
@@ -84,9 +82,7 @@ impl EventFilterContract {
         env.storage()
             .instance()
             .set(&DataKey::EventRecord(id), &event);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextEventId, &id);
+        env.storage().instance().set(&DataKey::NextEventId, &id);
 
         env.storage().instance().extend_ttl(0, 6_312_000);
 
@@ -182,11 +178,7 @@ impl EventFilterContract {
     }
 
     /// Get events by topic.
-    pub fn get_events_by_topic(
-        env: Env,
-        topic: Symbol,
-        limit: u32,
-    ) -> Vec<EventRecord> {
+    pub fn get_events_by_topic(env: Env, topic: Symbol, limit: u32) -> Vec<EventRecord> {
         let page_limit = if limit > MAX_PAGE_SIZE {
             MAX_PAGE_SIZE
         } else {
