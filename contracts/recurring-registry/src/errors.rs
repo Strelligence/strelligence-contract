@@ -15,4 +15,10 @@ pub enum ContractError {
     InvalidAmount = 5,
     /// Cannot confirm payment on a cancelled or expired subscription
     InactiveSubscription = 6,
+    /// Contract has not been initialized
+    NotInitialized = 7,
+    /// Cannot upgrade to the same WASM hash
+    SameWasmHash = 8,
+    /// Caller is not the contract admin
+    NotAdmin = 9,
 }
