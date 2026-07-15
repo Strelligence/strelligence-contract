@@ -8,6 +8,10 @@ members = [
     "contracts/upgradeable",
     "contracts/multi-sig",
     "contracts/snapshots",
+    "contracts/cross-contract",
+    "contracts/gas-optimizer",
+    "contracts/migration",
+    "contracts/access-control",
     "tests"
 ]
 
