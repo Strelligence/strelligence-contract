@@ -12,6 +12,10 @@ members = [
     "contracts/gas-optimizer",
     "contracts/migration",
     "contracts/access-control",
+    "contracts/event-filter",
+    "contracts/batch-ops",
+    "contracts/versioning",
+    "contracts/emergency-pause",
     "tests"
 ]
 
