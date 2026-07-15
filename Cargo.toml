@@ -6,6 +6,8 @@ members = [
     "contracts/metadata-registry",
     "contracts/automation-rules",
     "contracts/upgradeable",
+    "contracts/multi-sig",
+    "contracts/snapshots",
     "tests"
 ]
 

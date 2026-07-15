@@ -11,4 +11,12 @@ pub enum ContractError {
     AlreadyExists = 3,
     /// Confidence score must be between 0 and 100
     InvalidConfidence = 4,
+    /// Contract has not been initialized
+    NotInitialized = 5,
+    /// Cannot upgrade to the same WASM hash
+    SameWasmHash = 6,
+    /// Caller is not the contract admin
+    NotAdmin = 7,
+    /// Contract is already initialized
+    AlreadyInitialized = 8,
 }
