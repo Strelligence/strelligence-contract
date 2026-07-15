@@ -175,8 +175,8 @@ mod tests {
             &None,
         );
 
-        let ids_a = recurring.list_wallet_subscriptions(&wallet_a);
-        let ids_b = recurring.list_wallet_subscriptions(&wallet_b);
+        let ids_a = recurring.list_wallet_subscriptions(&wallet_a, &0, &10);
+        let ids_b = recurring.list_wallet_subscriptions(&wallet_b, &0, &10);
 
         assert_eq!(ids_a.len(), 1);
         assert_eq!(ids_b.len(), 1);
@@ -262,10 +262,10 @@ mod tests {
             );
         }
 
-        let ids = recurring.list_wallet_subscriptions(&owner);
+        let ids = recurring.list_wallet_subscriptions(&owner, &0, &10);
         assert_eq!(ids.len(), 5);
 
-        let active = recurring.list_active_subscriptions(&owner);
+        let active = recurring.list_active_subscriptions(&owner, &0, &10);
         assert_eq!(active.len(), 5);
 
         assert_eq!(recurring.total_subscriptions(), 5);
@@ -273,7 +273,7 @@ mod tests {
         recurring.cancel_subscription(&owner, &ids.get_unchecked(0));
         recurring.pause_subscription(&owner, &ids.get_unchecked(1));
 
-        let active = recurring.list_active_subscriptions(&owner);
+        let active = recurring.list_active_subscriptions(&owner, &0, &10);
         assert_eq!(active.len(), 3);
     }
 
