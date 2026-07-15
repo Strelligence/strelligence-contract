@@ -3,7 +3,7 @@ use soroban_sdk::{contract, contractimpl, Address, Bytes, Env, String, Vec};
 use crate::{
     errors::ContractError,
     events,
-    storage::{DataKey, INITIAL_VERSION, STORAGE_TTL},
+    storage::{DataKey, DEFAULT_PAGE_SIZE, INITIAL_VERSION, MAX_PAGE_SIZE, STORAGE_TTL},
     types::{Frequency, Subscription, SubscriptionStatus, SubscriptionType},
 };
 
@@ -375,16 +375,38 @@ impl RecurringRegistryContract {
         env.storage().persistent().get(&DataKey::Subscription(id))
     }
 
-    /// List all subscription IDs registered for a wallet.
-    pub fn list_wallet_subscriptions(env: Env, owner: Address) -> Vec<u64> {
-        env.storage()
+    /// List subscription IDs registered for a wallet with pagination.
+    pub fn list_wallet_subscriptions(
+        env: Env,
+        owner: Address,
+        offset: u32,
+        limit: u32,
+    ) -> Vec<u64> {
+        let limit = limit.min(MAX_PAGE_SIZE).max(1);
+        let ids: Vec<u64> = env
+            .storage()
             .persistent()
             .get(&DataKey::WalletSubscriptions(owner))
-            .unwrap_or(Vec::new(&env))
+            .unwrap_or(Vec::new(&env));
+
+        let start = offset as usize;
+        let end = (start + limit as usize).min(ids.len() as usize);
+
+        let mut result = Vec::new(&env);
+        for i in start..end {
+            result.push_back(ids.get_unchecked(i as u32));
+        }
+        result
     }
 
-    /// List only active subscriptions for a wallet (full objects).
-    pub fn list_active_subscriptions(env: Env, owner: Address) -> Vec<Subscription> {
+    /// List only active subscriptions for a wallet (full objects) with pagination.
+    pub fn list_active_subscriptions(
+        env: Env,
+        owner: Address,
+        offset: u32,
+        limit: u32,
+    ) -> Vec<Subscription> {
+        let limit = limit.min(MAX_PAGE_SIZE).max(1);
         let ids: Vec<u64> = env
             .storage()
             .persistent()
@@ -392,6 +414,9 @@ impl RecurringRegistryContract {
             .unwrap_or(Vec::new(&env));
 
         let mut active = Vec::new(&env);
+        let mut count = 0u32;
+        let mut skipped = 0u32;
+
         for id in ids.iter() {
             if let Some(sub) = env
                 .storage()
@@ -399,7 +424,12 @@ impl RecurringRegistryContract {
                 .get::<_, Subscription>(&DataKey::Subscription(id))
             {
                 if sub.status == SubscriptionStatus::Active {
-                    active.push_back(sub);
+                    if skipped < offset {
+                        skipped += 1;
+                    } else if count < limit {
+                        active.push_back(sub);
+                        count += 1;
+                    }
                 }
             }
         }
