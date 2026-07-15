@@ -24,9 +24,7 @@ impl BatchOpsContract {
 
         let placeholder = Bytes::from_array(&env, &[0u8; 32]);
         env.storage().instance().set(&DataKey::Admin, &admin);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextBatchId, &0u64);
+        env.storage().instance().set(&DataKey::NextBatchId, &0u64);
         env.storage()
             .instance()
             .set(&DataKey::Version, &INITIAL_VERSION);

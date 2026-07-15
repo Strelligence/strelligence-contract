@@ -87,9 +87,7 @@ impl SnapshotsContract {
         env.storage()
             .instance()
             .set(&DataKey::Snapshot(id), &snapshot);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextSnapshotId, &id);
+        env.storage().instance().set(&DataKey::NextSnapshotId, &id);
 
         let mut contract_snapshots: Vec<u64> = env
             .storage()

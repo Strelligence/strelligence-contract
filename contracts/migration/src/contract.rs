@@ -24,9 +24,7 @@ impl MigrationContract {
 
         let placeholder = Bytes::from_array(&env, &[0u8; 32]);
         env.storage().instance().set(&DataKey::Admin, &admin);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextPlanId, &0u64);
+        env.storage().instance().set(&DataKey::NextPlanId, &0u64);
         env.storage()
             .instance()
             .set(&DataKey::Version, &INITIAL_VERSION);
@@ -91,9 +89,7 @@ impl MigrationContract {
         env.storage()
             .instance()
             .set(&DataKey::MigrationPlan(id), &plan);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextPlanId, &id);
+        env.storage().instance().set(&DataKey::NextPlanId, &id);
         env.storage()
             .instance()
             .set(&DataKey::ContractPlan(contract_address), &id);
@@ -106,11 +102,7 @@ impl MigrationContract {
     }
 
     /// Start a migration. Only admin can call this.
-    pub fn start_migration(
-        env: Env,
-        caller: Address,
-        plan_id: u64,
-    ) -> Result<(), ContractError> {
+    pub fn start_migration(env: Env, caller: Address, plan_id: u64) -> Result<(), ContractError> {
         caller.require_auth();
 
         let admin: Address = env

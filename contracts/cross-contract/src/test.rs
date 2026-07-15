@@ -15,7 +15,14 @@ mod test {
         (env, client)
     }
 
-    fn setup_initialized<'a>() -> (Env, CrossContractRouterClient<'a>, Address, Address, Address, Address) {
+    fn setup_initialized<'a>() -> (
+        Env,
+        CrossContractRouterClient<'a>,
+        Address,
+        Address,
+        Address,
+        Address,
+    ) {
         let (env, client) = setup();
         env.mock_all_auths();
 
@@ -95,11 +102,7 @@ mod test {
         tx_hashes.push_back(String::from_str(&env, "tx1"));
         tx_hashes.push_back(String::from_str(&env, "tx2"));
 
-        let call_id = client.batch_update_metadata(
-            &admin,
-            &tx_hashes,
-            &Some(1),
-        );
+        let call_id = client.batch_update_metadata(&admin, &tx_hashes, &Some(1));
 
         assert_eq!(call_id, 1);
         assert!(client.is_processed(&call_id));
@@ -109,11 +112,7 @@ mod test {
     fn test_execute_rule_with_subscription_success() {
         let (env, client, admin, _, _, _) = setup_initialized();
 
-        let call_id = client.execute_rule_with_subscription(
-            &admin,
-            &1,
-            &1,
-        );
+        let call_id = client.execute_rule_with_subscription(&admin, &1, &1);
 
         assert_eq!(call_id, 1);
         assert!(client.is_processed(&call_id));

@@ -33,9 +33,7 @@ impl GasOptimizerContract {
         env.storage()
             .instance()
             .set(&DataKey::OptimizationSettings, &settings);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextProfileId, &0u64);
+        env.storage().instance().set(&DataKey::NextProfileId, &0u64);
         env.storage()
             .instance()
             .set(&DataKey::Version, &INITIAL_VERSION);
@@ -92,9 +90,7 @@ impl GasOptimizerContract {
         env.storage()
             .instance()
             .set(&DataKey::GasProfile(id), &profile);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextProfileId, &id);
+        env.storage().instance().set(&DataKey::NextProfileId, &id);
 
         env.storage().instance().extend_ttl(0, 6_312_000);
 
@@ -208,14 +204,14 @@ impl GasOptimizerContract {
 
     /// Get a gas profile by ID.
     pub fn get_gas_profile(env: Env, profile_id: u64) -> Option<GasProfile> {
-        env.storage().instance().get(&DataKey::GasProfile(profile_id))
+        env.storage()
+            .instance()
+            .get(&DataKey::GasProfile(profile_id))
     }
 
     /// Get optimization settings.
     pub fn get_settings(env: Env) -> Option<StorageOptimization> {
-        env.storage()
-            .instance()
-            .get(&DataKey::OptimizationSettings)
+        env.storage().instance().get(&DataKey::OptimizationSettings)
     }
 
     /// Get the current contract version.

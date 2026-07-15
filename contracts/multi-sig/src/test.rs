@@ -364,10 +364,7 @@ mod test {
 
         let result = client.try_execute_proposal(&signers.get_unchecked(0), &id);
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::AlreadyExecuted
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::AlreadyExecuted);
     }
 
     #[test]

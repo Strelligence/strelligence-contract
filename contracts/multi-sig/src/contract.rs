@@ -33,7 +33,9 @@ impl MultiSigContract {
         }
 
         env.storage().instance().set(&DataKey::Admin, &admin);
-        env.storage().instance().set(&DataKey::Threshold, &threshold);
+        env.storage()
+            .instance()
+            .set(&DataKey::Threshold, &threshold);
         env.storage()
             .instance()
             .set(&DataKey::NextProposalId, &0u64);
@@ -100,9 +102,7 @@ impl MultiSigContract {
         };
         signers.push_back(new_signer);
 
-        env.storage()
-            .instance()
-            .set(&DataKey::Signers, &signers);
+        env.storage().instance().set(&DataKey::Signers, &signers);
         env.storage().instance().extend_ttl(0, 6_312_000);
 
         events::signer_added(&env, &admin, &signer);
@@ -272,9 +272,7 @@ impl MultiSigContract {
         env.storage()
             .instance()
             .set(&DataKey::Proposal(id), &proposal);
-        env.storage()
-            .instance()
-            .set(&DataKey::NextProposalId, &id);
+        env.storage().instance().set(&DataKey::NextProposalId, &id);
 
         let signers_voted: Vec<Address> = Vec::new(&env);
         env.storage()
@@ -289,11 +287,7 @@ impl MultiSigContract {
     }
 
     /// Sign a proposal. Only signers can call this.
-    pub fn sign_proposal(
-        env: Env,
-        caller: Address,
-        proposal_id: u64,
-    ) -> Result<(), ContractError> {
+    pub fn sign_proposal(env: Env, caller: Address, proposal_id: u64) -> Result<(), ContractError> {
         caller.require_auth();
 
         let signers: Vec<Signer> = env

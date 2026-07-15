@@ -502,10 +502,7 @@ mod test {
         let new_hash = Bytes::from_array(&env, &[1u8; 32]);
         let result = client.try_upgrade(&caller, &new_hash);
         assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err().unwrap(),
-            ContractError::NotInitialized
-        );
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::NotInitialized);
     }
 
     #[test]
