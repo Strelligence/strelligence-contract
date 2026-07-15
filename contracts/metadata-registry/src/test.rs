@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test {
     use soroban_sdk::testutils::Address as _;
-    use soroban_sdk::{Address, Env, String, Vec};
+    use soroban_sdk::{Address, Bytes, Env, String, Vec};
 
     use crate::contract::MetadataRegistryContract;
     use crate::contract::MetadataRegistryContractClient;
@@ -511,5 +511,126 @@ mod test {
         let owner = Address::generate(&env);
         let results = client.get_metadata_by_category(&owner, &TransactionCategory::Expense);
         assert_eq!(results.len(), 0);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // upgrade functions
+    // ─────────────────────────────────────────────────────────────────────────
+
+    #[test]
+    fn test_initialize_success() {
+        let (env, client) = setup();
+        env.mock_all_auths();
+        let admin = Address::generate(&env);
+
+        client.initialize(&admin);
+
+        assert_eq!(client.get_admin(), Some(admin));
+        assert_eq!(client.get_version(), 1);
+        assert!(client.get_wasm_hash().is_some());
+    }
+
+    #[test]
+    fn test_initialize_twice_fails() {
+        let (env, client) = setup();
+        env.mock_all_auths();
+        let admin = Address::generate(&env);
+
+        client.initialize(&admin);
+
+        let result = client.try_initialize(&admin);
+        assert!(result.is_err());
+        assert_eq!(
+            result.unwrap_err().unwrap(),
+            ContractError::AlreadyInitialized
+        );
+    }
+
+    #[test]
+    fn test_upgrade_success() {
+        let (env, client) = setup();
+        env.mock_all_auths();
+        let admin = Address::generate(&env);
+
+        client.initialize(&admin);
+
+        let new_hash = Bytes::from_array(&env, &[1u8; 32]);
+        client.upgrade(&admin, &new_hash);
+
+        assert_eq!(client.get_version(), 2);
+        assert_eq!(client.get_wasm_hash(), Some(new_hash));
+    }
+
+    #[test]
+    fn test_upgrade_increments_version() {
+        let (env, client) = setup();
+        env.mock_all_auths();
+        let admin = Address::generate(&env);
+
+        client.initialize(&admin);
+
+        let hash1 = Bytes::from_array(&env, &[1u8; 32]);
+        client.upgrade(&admin, &hash1);
+        assert_eq!(client.get_version(), 2);
+
+        let hash2 = Bytes::from_array(&env, &[2u8; 32]);
+        client.upgrade(&admin, &hash2);
+        assert_eq!(client.get_version(), 3);
+    }
+
+    #[test]
+    fn test_upgrade_same_hash_fails() {
+        let (env, client) = setup();
+        env.mock_all_auths();
+        let admin = Address::generate(&env);
+
+        client.initialize(&admin);
+
+        let hash = Bytes::from_array(&env, &[0u8; 32]);
+        let result = client.try_upgrade(&admin, &hash);
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::SameWasmHash);
+    }
+
+    #[test]
+    fn test_upgrade_unauthorized_fails() {
+        let (env, client) = setup();
+        env.mock_all_auths();
+        let admin = Address::generate(&env);
+        let attacker = Address::generate(&env);
+
+        client.initialize(&admin);
+
+        let new_hash = Bytes::from_array(&env, &[1u8; 32]);
+        let result = client.try_upgrade(&attacker, &new_hash);
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err().unwrap(), ContractError::NotAdmin);
+    }
+
+    #[test]
+    fn test_upgrade_before_init_fails() {
+        let (env, client) = setup();
+        env.mock_all_auths();
+        let caller = Address::generate(&env);
+
+        let new_hash = Bytes::from_array(&env, &[1u8; 32]);
+        let result = client.try_upgrade(&caller, &new_hash);
+        assert!(result.is_err());
+        assert_eq!(
+            result.unwrap_err().unwrap(),
+            ContractError::NotInitialized
+        );
+    }
+
+    #[test]
+    fn test_get_admin_before_init_returns_none() {
+        let (env, client) = setup();
+        assert_eq!(client.get_admin(), None);
+    }
+
+    #[test]
+    fn test_get_version_before_init_returns_initial() {
+        let (env, client) = setup();
+        assert_eq!(client.get_version(), 1);
     }
 }
